@@ -1,1 +1,5 @@
 pygame
+
+
+# packaging in a Windows exec
+pyinstaller.exe src\__main__.py --onefile --windowed
