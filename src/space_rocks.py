@@ -1,6 +1,6 @@
-import pygame
+import pygame as pg
 
-from helpers.exceptions import GameOver, RestartGame
+from helpers.exceptions import ExitGame, RestartGame
 from helpers.utils import get_random_position, load_sprite, print_text
 from models.asteroid import Asteroid
 from models.space_ship import Spaceship
@@ -15,10 +15,10 @@ class SpaceRocks:
 
     def __init__(self):
         self._init_pygame()
-        self.screen = pygame.display.set_mode(self._SCREEN_DIMENSIONS)
+        self.screen = pg.display.set_mode(self._SCREEN_DIMENSIONS)
         self.background = load_sprite("space", False)
-        self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 64)
+        self.clock = pg.time.Clock()
+        self.font = pg.font.Font(None, 64)
         self.message = ""
 
         self.asteroids = []
@@ -36,39 +36,39 @@ class SpaceRocks:
 
             self.asteroids.append(Asteroid(position, self.asteroids.append))
 
-    def main_loop(self):
+    def run_loop(self):
         while True:
             self._handle_input()
             self._process_game_logic()
             self._draw()
 
     def _init_pygame(self):
-        pygame.init()
-        pygame.display.set_caption("Space Rocks")
+        pg.init()
+        pg.display.set_caption("Space Rocks")
 
     def _handle_input(self):
-        for event in pygame.event.get():
+        for event in pg.event.get():
             match event.type:
-                case pygame.QUIT:
-                    raise GameOver
-                case pygame.KEYDOWN:
+                case pg.QUIT:
+                    raise ExitGame
+                case pg.KEYDOWN:
                     match event.key:
-                        case pygame.K_ESCAPE:
-                            raise GameOver
-                        case pygame.K_RETURN:
+                        case pg.K_ESCAPE:
+                            raise ExitGame
+                        case pg.K_RETURN:
                             raise RestartGame
-                        case pygame.K_SPACE:
+                        case pg.K_SPACE:
                             if self.spaceship:
                                 self.spaceship.shoot()
 
-        is_key_pressed = pygame.key.get_pressed()
-
+        # get user key
         if self.spaceship:
-            if is_key_pressed[pygame.K_RIGHT]:
+            is_key_pressed = pg.key.get_pressed()
+            if is_key_pressed[pg.K_RIGHT]:
                 self.spaceship.rotate(clockwise=True)
-            elif is_key_pressed[pygame.K_LEFT]:
+            elif is_key_pressed[pg.K_LEFT]:
                 self.spaceship.rotate(clockwise=False)
-            if is_key_pressed[pygame.K_UP]:
+            if is_key_pressed[pg.K_UP]:
                 self.spaceship.accelerate()
 
     def _process_game_logic(self):
@@ -107,7 +107,7 @@ class SpaceRocks:
         if self.message:
             print_text(self.screen, self.message, self.font)
 
-        pygame.display.flip()
+        pg.display.flip()
         self.clock.tick(self._FPS)
 
     def _get_game_objects(self):
