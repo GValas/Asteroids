@@ -1,5 +1,5 @@
-from helpers.exceptions import ExitGame, GameOver, RestartGame
-from space_rocks import SpaceRocks
+from game.space_rocks import SpaceRocks
+from helpers.exceptions import ExitGame, RestartGame
 
 if __name__ == "__main__":
     while True:
@@ -11,7 +11,4 @@ if __name__ == "__main__":
             pass
 
         except ExitGame:
-            break
-
-        except GameOver:
             break

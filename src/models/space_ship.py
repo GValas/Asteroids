@@ -16,18 +16,18 @@ class Spaceship(GameObject):
     def __init__(self, position, create_bullet_callback):
         self.create_bullet_callback = create_bullet_callback
         self.laser_sound = load_sound("laser")
-        self.direction = pg.math.Vector2(UP)
-        super().__init__(position, load_sprite("spaceship"), pg.math.Vector2(0))
+        self.direction = pg.Vector2(UP)
+        super().__init__(position, load_sprite("spaceship"), pg.Vector2(0))
 
     def rotate(self, clockwise=True):
         sign = 1 if clockwise else -1
         angle = self._MANEUVERABILITY * sign
         self.direction.rotate_ip(angle)
 
-    def draw(self, surface):
+    def draw(self, surface: pg.Surface):
         angle = self.direction.angle_to(UP)
         rotated_surface = pg.transform.rotozoom(self.sprite, angle, 1.0)
-        rotated_surface_size = pg.math.Vector2(rotated_surface.get_size())
+        rotated_surface_size = pg.Vector2(rotated_surface.get_size())
         blit_position = self.position - rotated_surface_size * 0.5
         surface.blit(rotated_surface, blit_position)
 
@@ -43,6 +43,6 @@ class Spaceship(GameObject):
         self.create_bullet_callback(bullet)
         self.laser_sound.play()
 
-    def move(self, surface):
+    def move(self, surface: pg.Surface):
         self.position = wrap_position(self.position + self.velocity, surface)
         self.decelerate()
