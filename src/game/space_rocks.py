@@ -80,6 +80,7 @@ class SpaceRocks(AbstractGame):
 
     def _process_game_logic(self):
         self._move_objects()
+        self._handle_asteroids_collision()
         self._handle_spaceship_asteroids_collision()
         self._handle_bullets_asteroids_collision()
         self._remove_off_screen_bullets()
@@ -92,6 +93,14 @@ class SpaceRocks(AbstractGame):
     def _check_won_game(self):
         if not self.asteroids and self.spaceship:
             self.message = "You won!"
+
+    def _handle_asteroids_collision(self):
+        asteroids = self.asteroids[:]
+        while asteroids:
+            a1 = asteroids.pop()
+            for a2 in asteroids:
+                if a1.collides_with(a2):
+                    a1.velocity, a2.velocity = a2.velocity, a1.velocity
 
     def _handle_spaceship_asteroids_collision(self):
         if self.spaceship:
