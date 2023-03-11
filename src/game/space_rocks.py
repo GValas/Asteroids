@@ -134,7 +134,7 @@ class SpaceRocks(AbstractGame):
         if self.message:
             print_text(self.screen, self.message, self.font)
 
-        pg.display.flip()
+        pg.display.update()
         self.clock.tick(self._FPS)
 
     def _get_game_objects(self):
